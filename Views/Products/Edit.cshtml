@@ -1,0 +1,108 @@
+@model MySimpleWebApp.Models.Product
+
+@{
+    ViewData["Title"] = "Edit Record";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col">
+            <h2 class="display-4">Edit @(Model.RecordType == "In" ? "Receiving" : "Shipping") Record</h2>
+        </div>
+    </div>
+
+    <form asp-action="Edit" class="row g-3">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="RecordType" />
+        <input type="hidden" asp-for="DateAdded" />
+
+        <!-- Item Details Group -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Item Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="SerialNumber" class="form-label">Serial Number *</label>
+                        <input asp-for="SerialNumber" class="form-control" placeholder="Enter unique serial number" />
+                        <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Item Name *</label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter product name or model" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Category" class="form-label">Category *</label>
+                        <select asp-for="Category" class="form-select">
+                            <option value="">Select a category</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Hardware">Hardware</option>
+                            <option value="Software">Software</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Quantity" class="form-label">Quantity *</label>
+                        <input asp-for="Quantity" class="form-control" type="number" min="1" />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Additional Notes (Optional)</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" 
+                                placeholder="Enter any additional details about this item"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Details Group -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Request Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="RequestedBy" class="form-label">Requested By (Person handling shipment) *</label>
+                        <input asp-for="RequestedBy" class="form-control" placeholder="Enter full name" />
+                        <span asp-validation-for="RequestedBy" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="RmaNumber" class="form-label">RMA Number (if applicable)</label>
+                        <input asp-for="RmaNumber" class="form-control" placeholder="Enter RMA if this is a return" />
+                        <small class="text-muted">Leave blank if not a return/RMA</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DateAdded" class="form-label">Record Date *</label>
+                        <input asp-for="DateAdded" type="date" class="form-control" />
+                        <span asp-validation-for="DateAdded" class="text-danger"></span>
+                        <small class="text-muted">Select the date this record was created</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Update Record
+            </button>
+            <a asp-action="Index" asp-route-type="@Model.RecordType" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

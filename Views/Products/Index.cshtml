@@ -1,0 +1,129 @@
+@model IEnumerable<MySimpleWebApp.Models.Product>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = ViewBag.Type == "In" ? "Receiving" : "Shipping";
+    var query = HttpContextAccessor.HttpContext?.Request.Query;
+    var searchString = query?["searchString"].ToString() ?? "";
+    var category = query?["category"].ToString() ?? "";
+    var startDate = query?["startDate"].ToString() ?? "";
+    var endDate = query?["endDate"].ToString() ?? "";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col">
+            <h2 class="display-4">@ViewData["Title"]</h2>
+        </div>
+    </div>
+
+    <form method="get" class="row g-3 mb-4">
+        <input type="hidden" name="type" value="@ViewBag.Type" />
+        
+        <div class="col-md-3">
+            <input type="text" name="searchString" class="form-control" 
+                   placeholder="Search products..." value="@searchString" />
+        </div>
+        
+        <div class="col-md-2">
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+                @foreach(var cat in Model.Select(p => p.Category).Distinct())
+                {
+                    <option value="@cat" selected="@(cat == category)">@cat</option>
+                }
+            </select>
+        </div>
+        
+        <div class="col-md-2">
+            <input type="date" name="startDate" class="form-control" 
+                   placeholder="Start Date" value="@startDate" />
+        </div>
+        
+        <div class="col-md-2">
+            <input type="date" name="endDate" class="form-control" 
+                   placeholder="End Date" value="@endDate" />
+        </div>
+        
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary me-2">
+                <i class="bi bi-search"></i> Search
+            </button>
+            <a asp-controller="Products" 
+               asp-action="Export" 
+               asp-route-type="@ViewBag.Type"
+               asp-route-startDate="@startDate"
+               asp-route-endDate="@endDate"
+               class="btn btn-success me-2">
+                <i class="bi bi-download"></i> Export
+            </a>
+            <a asp-action="Index" asp-route-type="@ViewBag.Type" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle"></i> Reset
+            </a>
+        </div>
+    </form>
+
+    <div class="row mb-3">
+        <div class="col">
+            <a asp-action="Create" asp-route-type="@ViewBag.Type" class="btn btn-success me-2">
+                <i class="bi bi-plus-circle"></i> Add New Record
+            </a>
+            <a asp-action="Index" 
+               asp-route-type="@ViewBag.Type" 
+               asp-route-sortOrder="@(ViewBag.CurrentSort == "old" ? "" : "old")" 
+               class="btn btn-outline-secondary">
+                <i class="bi bi-sort-down"></i> 
+                @(ViewBag.CurrentSort == "old" ? "Sort by New" : "Sort by Old")
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No records found. Try adjusting your search criteria or add a new record.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Serial #</th>
+                        <th>Item Name</th>
+                        <th>Category</th>
+                        <th>Qty</th>
+                        <th>Requested By</th>
+                        <th>RMA #</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.SerialNumber)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                            <td>@Html.DisplayFor(modelItem => item.RequestedBy)</td>
+                            <td>@Html.DisplayFor(modelItem => item.RmaNumber)</td>
+                            <td>@Html.DisplayFor(modelItem => item.DateAdded)</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+}

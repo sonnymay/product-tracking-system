@@ -20,21 +20,25 @@ A web application for managing product inventory and RMA (Return Merchandise Aut
 ## Getting Started
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/YourUsername/product-tracking-system.git
 ```
 
 2. Navigate to the project directory:
+
 ```bash
 cd product-tracking-system
 ```
 
 3. Run the migrations:
+
 ```bash
 dotnet ef database update
 ```
 
 4. Start the application:
+
 ```bash
 dotnet run
 ```
