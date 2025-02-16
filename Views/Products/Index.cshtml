@@ -66,7 +66,7 @@
     <div class="row mb-3">
         <div class="col">
             <a asp-action="Create" asp-route-type="@ViewBag.Type" class="btn btn-success me-2">
-                <i class="bi bi-plus-circle"></i> Add New Record
+                <i class="bi bi-plus-circle"></i> Add New @(ViewBag.Type == "In" ? "Receiving" : "Shipping") Record
             </a>
             <a asp-action="Index" 
                asp-route-type="@ViewBag.Type" 

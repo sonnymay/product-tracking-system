@@ -108,20 +108,23 @@ namespace MySimpleWebApp.Controllers
         // GET: Products/Create
         public IActionResult Create(string type = "In")
         {
+            Console.WriteLine($"GET Create - type parameter: {type}");  // Debug line
             ViewBag.Type = type;
+            Console.WriteLine($"GET Create - ViewBag.Type: {ViewBag.Type}");  // Debug line
             return View(new Product { DateAdded = DateTime.UtcNow, RecordType = type });
         }
 
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Category,Quantity,SerialNumber,RequestedBy,RmaNumber,RecordType,DateAdded")] Product product)
+        public async Task<IActionResult> Create([Bind("Name,SerialNumber,Category,RequestedBy,RmaNumber,RecordType,DateAdded")] Product product)
         {
+            Console.WriteLine($"POST Create - RecordType: {product.RecordType}");  // Debug line
             if (ModelState.IsValid)
             {
                 _context.Add(product);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { type = product.RecordType });
             }
             return View(product);
         }
