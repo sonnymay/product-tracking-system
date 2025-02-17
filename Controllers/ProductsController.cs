@@ -117,11 +117,15 @@ namespace MySimpleWebApp.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,SerialNumber,Category,RequestedBy,RmaNumber,RecordType,DateAdded")] Product product)
+        public async Task<IActionResult> Create([Bind("Name,SerialNumber,Category,RequestedBy,RmaNumber,RecordType,DateAdded")] Product product, string? OtherCategory)
         {
             Console.WriteLine($"POST Create - RecordType: {product.RecordType}");  // Debug line
             if (ModelState.IsValid)
             {
+                if (product.Category == "Other" && !string.IsNullOrEmpty(OtherCategory))
+                {
+                    product.Category = OtherCategory;
+                }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new { type = product.RecordType });
@@ -143,13 +147,17 @@ namespace MySimpleWebApp.Controllers
         // POST: /Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Category,Quantity,SerialNumber,RequestedBy,RmaNumber,DateAdded,RecordType")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Category,Quantity,SerialNumber,RequestedBy,RmaNumber,DateAdded,RecordType")] Product product, string? OtherCategory)
         {
             if (id != product.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
+                if (product.Category == "Other" && !string.IsNullOrEmpty(OtherCategory))
+                {
+                    product.Category = OtherCategory;
+                }
                 try
                 {
                     _context.Update(product);

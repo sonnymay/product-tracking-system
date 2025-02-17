@@ -38,14 +38,18 @@
 
                     <div class="mb-3">
                         <label asp-for="Category" class="form-label">Category *</label>
-                        <select asp-for="Category" class="form-select">
+                        <select asp-for="Category" class="form-select" id="categorySelect">
                             <option value="">Select a category</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Hardware">Hardware</option>
-                            <option value="Software">Software</option>
+                            <option value="Base Station">Base Station</option>
+                            <option value="CPE">CPE</option>
                             <option value="Other">Other</option>
                         </select>
                         <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3" id="otherCategoryDiv" style="display: none;">
+                        <label for="otherCategoryInput" class="form-label">Please specify:</label>
+                        <input type="text" id="otherCategoryInput" name="OtherCategory" class="form-control" />
                     </div>
 
                     <div class="mb-3">
@@ -77,9 +81,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="RmaNumber" class="form-label">RMA Number (if applicable)</label>
-                        <input asp-for="RmaNumber" class="form-control" placeholder="Enter RMA if this is a return" />
-                        <small class="text-muted">Leave blank if not a return/RMA</small>
+                        <label asp-for="RmaNumber" class="form-label">@(Model.RecordType == "Out" ? "Tracking #" : "RMA #")</label>
+                        <input asp-for="RmaNumber" class="form-control" placeholder="@(Model.RecordType == "Out" ? "Enter tracking number" : "Enter RMA if this is a return")" />
+                        <small class="text-muted">@(Model.RecordType == "Out" ? "Enter shipping tracking number" : "Leave blank if not a return/RMA")</small>
                     </div>
 
                     <div class="mb-3">
@@ -105,4 +109,25 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        const categorySelect = document.getElementById("categorySelect");
+        const otherCategoryDiv = document.getElementById("otherCategoryDiv");
+        const otherCategoryInput = document.getElementById("otherCategoryInput");
+
+        // Show "Other" field if category is not in the dropdown
+        if (!["", "Base Station", "CPE", "Other"].includes(categorySelect.value)) {
+            otherCategoryInput.value = categorySelect.value;
+            categorySelect.value = "Other";
+            otherCategoryDiv.style.display = "block";
+        }
+
+        categorySelect.addEventListener("change", function() {
+            if (categorySelect.value === "Other") {
+                otherCategoryDiv.style.display = "block";
+            } else {
+                otherCategoryDiv.style.display = "none";
+                otherCategoryInput.value = "";
+            }
+        });
+    </script>
 }

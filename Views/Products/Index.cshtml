@@ -95,7 +95,7 @@
                         <th>Category</th>
                         <th>Qty</th>
                         <th>Requested By</th>
-                        <th>RMA #</th>
+                        <th>@(ViewBag.Type == "Out" ? "Tracking #" : "RMA #")</th>
                         <th>Date</th>
                         <th>Actions</th>
                     </tr>

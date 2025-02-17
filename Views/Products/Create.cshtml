@@ -28,10 +28,21 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
+                <label asp-for="Category" class="form-label">Category *</label>
+                <select asp-for="Category" class="form-select" id="categorySelect">
+                    <option value="">Select a category</option>
+                    <option value="Base Station">Base Station</option>
+                    <option value="CPE">CPE</option>
+                    <option value="Other">Other</option>
+                </select>
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
+
+            <div class="mb-3" id="otherCategoryDiv" style="display: none;">
+                <label for="otherCategoryInput" class="form-label">Please specify:</label>
+                <input type="text" id="otherCategoryInput" name="OtherCategory" class="form-control" />
+            </div>
+
             <div class="form-group mb-3">
                 <label asp-for="Quantity" class="control-label"></label>
                 <input asp-for="Quantity" class="form-control" />
@@ -48,8 +59,8 @@
                 <span asp-validation-for="RequestedBy" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="RmaNumber" class="control-label"></label>
-                <input asp-for="RmaNumber" class="form-control" />
+                <label asp-for="RmaNumber" class="control-label">@(ViewBag.Type == "Out" ? "Tracking #" : "RMA #")</label>
+                <input asp-for="RmaNumber" class="form-control" placeholder="@(ViewBag.Type == "Out" ? "Enter tracking number" : "Enter RMA if this is a return")" />
                 <span asp-validation-for="RmaNumber" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
@@ -68,4 +79,18 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        const categorySelect = document.getElementById("categorySelect");
+        const otherCategoryDiv = document.getElementById("otherCategoryDiv");
+        const otherCategoryInput = document.getElementById("otherCategoryInput");
+
+        categorySelect.addEventListener("change", function() {
+            if (categorySelect.value === "Other") {
+                otherCategoryDiv.style.display = "block";
+            } else {
+                otherCategoryDiv.style.display = "none";
+                otherCategoryInput.value = "";
+            }
+        });
+    </script>
 }
