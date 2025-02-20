@@ -114,11 +114,21 @@
         const otherCategoryDiv = document.getElementById("otherCategoryDiv");
         const otherCategoryInput = document.getElementById("otherCategoryInput");
 
-        // Show "Other" field if category is not in the dropdown
-        if (!["", "Base Station", "CPE", "Other"].includes(categorySelect.value)) {
-            otherCategoryInput.value = categorySelect.value;
+        // Get the model's category value
+        const modelCategory = '@(Model.Category ?? "")'.trim();
+
+        // Pre-select based on Model.Category
+        if(["Base Station", "CPE", "Other"].includes(modelCategory)) {
+            categorySelect.value = modelCategory;
+            if(modelCategory === "Other") {
+                otherCategoryDiv.style.display = "block";
+                otherCategoryInput.value = modelCategory;
+            }
+        } else if(modelCategory !== "") {
+            // For custom categories, set to "Other" and show the input
             categorySelect.value = "Other";
             otherCategoryDiv.style.display = "block";
+            otherCategoryInput.value = modelCategory;
         }
 
         categorySelect.addEventListener("change", function() {
