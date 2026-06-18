@@ -26,12 +26,7 @@ namespace MySimpleWebApp.Controllers
             ViewBag.Type = type;
             ViewBag.CurrentSort = sortOrder;
             
-            // Handle null RecordType values
-            var products = _context.Products.Where(p => 
-                (p.RecordType ?? "In") == type &&
-                (p.SerialNumber ?? "N/A") == p.SerialNumber &&
-                (p.RequestedBy ?? "Unknown") == p.RequestedBy &&
-                (p.RmaNumber ?? "N/A") == p.RmaNumber);
+            var products = _context.Products.Where(p => (p.RecordType ?? "In") == type);
 
             if (startDate != null) products = products.Where(p => p.DateAdded >= startDate);
             if (endDate != null) products = products.Where(p => p.DateAdded <= endDate);
@@ -108,9 +103,7 @@ namespace MySimpleWebApp.Controllers
         // GET: Products/Create
         public IActionResult Create(string type = "In")
         {
-            Console.WriteLine($"GET Create - type parameter: {type}");  // Debug line
             ViewBag.Type = type;
-            Console.WriteLine($"GET Create - ViewBag.Type: {ViewBag.Type}");  // Debug line
             return View(new Product { DateAdded = DateTime.UtcNow, RecordType = type });
         }
 
@@ -119,7 +112,6 @@ namespace MySimpleWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,SerialNumber,Category,RequestedBy,RmaNumber,RecordType,DateAdded")] Product product, string? OtherCategory)
         {
-            Console.WriteLine($"POST Create - RecordType: {product.RecordType}");  // Debug line
             if (ModelState.IsValid)
             {
                 if (product.Category == "Other" && !string.IsNullOrEmpty(OtherCategory))
