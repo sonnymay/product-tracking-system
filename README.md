@@ -1,6 +1,7 @@
 # Product Tracking System
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)](https://dotnet.microsoft.com/)
+[![CI](https://github.com/sonnymay/product-tracking-system/actions/workflows/ci.yml/badge.svg)](https://github.com/sonnymay/product-tracking-system/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Inventory and RMA tracker built with ASP.NET Core MVC, Entity Framework Core, and SQLite.
