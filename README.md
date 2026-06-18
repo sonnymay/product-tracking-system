@@ -1,63 +1,48 @@
 # Product Tracking System
 
-A web application for managing product inventory and RMA (Return Merchandise Authorization) tracking built with ASP.NET Core.
+[![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)](https://dotnet.microsoft.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Features
+Inventory and RMA tracker built with ASP.NET Core MVC, Entity Framework Core, and SQLite.
 
-- Product inventory management
-- RMA tracking
-- Date tracking for products
-- Category management
-- Serial number tracking
+## Why this exists
 
-## Technologies- C# (.NET 6.0)
+Support teams often track products, serial numbers, RMAs, and request history in separate spreadsheets. This app keeps those records in one searchable MVC web app with date filters and CSV export.
 
-- ASP.NET Core MVC
-- Entity Framework Core
-- SQLite Database
-- Bootstrap UI Framework
+## What this code shows
 
-## Technical Highlights
+- ASP.NET Core MVC structure with controllers, Razor views, and model validation.
+- Entity Framework Core migrations against a local SQLite database.
+- Inventory and RMA records with serial number, requester, category, date, and record type.
+- Search, category filtering, date filtering, newest/oldest sorting, and CSV export.
 
-- Built with C# and ASP.NET Core MVC architecture
-- LINQ queries for efficient data operations
-- Entity Framework Core for data management
-- C# model validation attributes
-- Strong typing and null safety features
-- SQLite database for data persistence
-- Bootstrap for responsive design
-- RESTful API endpoints for product operations
-- Form validation and data sanitization
-- Bootstrap Icons for enhanced UI
+## Stack
 
-## Getting Started
+| Layer | Tech |
+|---|---|
+| Web app | ASP.NET Core MVC, Razor views |
+| Data | Entity Framework Core, SQLite |
+| UI | Bootstrap |
+| Runtime | .NET 8 |
 
-1. Clone the repository:
+## Local development
 
 ```bash
-git clone https://github.com/YourUsername/product-tracking-system.git
-```
-
-2. Navigate to the project directory:
-
-```bash
+git clone https://github.com/sonnymay/product-tracking-system.git
 cd product-tracking-system
-```
-
-3. Run the migrations:
-
-```bash
+dotnet restore
 dotnet ef database update
+dotnet run
 ```
 
-4. Start the application:
+The app starts on the URL printed by `dotnet run`, usually `http://localhost:5000` or `https://localhost:5001`.
+
+## Quality check
 
 ```bash
-dotnet run
+dotnet build --configuration Release
 ```
 
 ## License
 
 MIT
-
-# product-tracking-system
